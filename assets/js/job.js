@@ -1,12 +1,11 @@
 const jobfinder = {
     init: function () {
-        this.computrabajo();
+        this.chiletrabajos();
     },
     computrabajo: function () {
         "use strict";
-        const base_url = "https://www.computrabajo.cl";
-        const ws_url = "http://localhost/personal/inicio/computrabajo/";
-        let data = null;
+        let base_url = "https://www.computrabajo.cl";
+        let ws_url = "http://localhost/personal/inicio/computrabajo/";
 
         let xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -16,10 +15,11 @@ const jobfinder = {
                 let response = JSON.parse(this.responseText);
                 if (response.result) {
                     let li = '';
-                    response.paginas.forEach(pagina => {
+                    response.pages.forEach(pagina => {
                         let parser = new DOMParser();
                         let html = parser.parseFromString(pagina, "text/html");
                         let offers_get = html.getElementById("p_ofertas").getElementsByClassName("bRS bClick");
+
                         Array.from(offers_get).forEach(offer => {
                             let new_offer = {
                                 title: offer.getElementsByClassName("js-o-link")[0].innerHTML,
@@ -49,7 +49,56 @@ const jobfinder = {
         xhr.open("GET", ws_url);
         xhr.setRequestHeader("cache-control", "no-cache");
 
-        xhr.send(data);
+        xhr.send();
+    },
+    chiletrabajos: function () {
+        "use strict";
+        let base_url = "https://www.computrabajo.cl";
+        let ws_url = "http://localhost/personal/inicio/chiletrabajos/";
+
+        let xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                let response = JSON.parse(this.responseText);
+                if (response.result) {
+                    let li = '';
+                    response.pages.forEach(pagina => {
+                        let parser = new DOMParser();
+                        let html = parser.parseFromString(pagina, "text/html");
+                        let offers_get = html.getElementsByClassName("col-sm-6 page-content mb30")[0].getElementsByClassName("jobs-item with-thumb encuentra__empleo--yellow");
+
+                        Array.from(offers_get).forEach(offer => {
+                            let new_offer = {
+                                title: offer.getElementsByClassName("title")[0].getElementsByTagName("b")[0].innerHTML,
+                                url: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].href,
+                                company: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
+                                date: offer.getElementsByClassName("date")[0].innerHTML.replace(/span|<|>/g, "").replace("/", ""),
+                                img: "https://s3.amazonaws.com/cht2/public/img/ch/featured.png",
+                                address: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
+                                description: offer.getElementsByClassName("description")[0].innerHTML
+                            };
+                            console.log(offers_get);
+                            li += '<li class="media">';
+                            li += '<img class="align-self-center mr-3" src="' + new_offer.img + '" alt="' + new_offer.title + '">';
+                            li += '<div class="media-body">';
+                            li += '<h5 class="mt-0"><a href="' + new_offer.url + '" target="_blank">' + new_offer.title + '</a></h5>';
+                            li += '<span>' + new_offer.date + ' / ' + new_offer.company + ' / ' + new_offer.address + '</span>';
+                            li += '<p>' + new_offer.description + '</p>';
+                            li += '</div>';
+                            li += '</li>';
+                        });
+                    });
+                    document.getElementById("offers").innerHTML = li;
+                }
+            }
+        });
+
+        xhr.open("GET", ws_url);
+        xhr.setRequestHeader("cache-control", "no-cache");
+
+        xhr.send();
     }
 };
 
