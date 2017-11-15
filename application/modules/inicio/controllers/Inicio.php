@@ -59,4 +59,51 @@ class Inicio extends CI_Controller {
 			echo json_encode(["result" => true, "pages" => $pages]);
 		}
 	}
+
+	public function yapo(){
+
+		$url = "https://www.yapo.cl/biobio/ofertas_de_empleo/?";
+
+		$pages = [];
+		foreach($this->keywords as $q){
+			$this->query["q"] = $q;
+			$pages[] = file_get_contents($url . http_build_query($this->query));
+		}
+
+		if(!array_filter($pages)){
+			echo json_encode(["result" => false]);
+		}else{
+			echo json_encode(["result" => true, "pages" => $pages]);
+		}
+	}
+
+	public function yapo_curl(){
+		
+		$curl = curl_init();
+		
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => "https://www.yapo.cl/biobio/ofertas_de_empleo/?q=Desarrollador",
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "GET",
+		  CURLOPT_HTTPHEADER => array(
+			"cache-control: no-cache",
+			"postman-token: dc537b5d-2884-bb29-220a-8fbbe4c20e53"
+		  ),
+		));
+		
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+		
+		curl_close($curl);
+		
+		if ($err) {
+		  echo "cURL Error #:" . $err;
+		} else {
+		  echo $response;
+		}
+	}
 }
