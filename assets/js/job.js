@@ -1,16 +1,15 @@
 const jobfinder = {
     init: function () {
         Promise.all([
-            this.get("http://localhost/personal/inicio/chiletrabajos/"),
-            this.get("http://localhost/personal/inicio/computrabajo/"),
-            this.get("http://localhost/personal/inicio/yapo/")
+            this.get(location.href + "inicio/chiletrabajos/"),
+            this.get(location.href + "inicio/computrabajo/")
         ]).then(values => {
             Promise.all([
                 this.chiletrabajos(values[0]),
-                this.computrabajo(values[1]),
-                this.computrabajo(values[2])
+                this.computrabajo(values[1])
             ]).then(values => {
-                document.getElementById("offers").innerHTML = values[0] + values[1]
+                document.getElementById("offers_chiletrabajos").innerHTML = values[0]
+                document.getElementById("offers_computrabajo").innerHTML = values[1]
             })
         }).catch(errors => {
             console.log(errors)
@@ -42,6 +41,11 @@ const jobfinder = {
     chiletrabajos: function (pages) {
         return new Promise((resolve, reject) => {
             let li = ''
+            let offers = new Array()
+            let meses = new Array(
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            )
+
             pages.forEach(pages => {
                 let parser = new DOMParser()
                 let html = parser.parseFromString(pages, "text/html")
@@ -53,19 +57,39 @@ const jobfinder = {
                         url: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].href,
                         company: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
                         date: offer.getElementsByClassName("date")[0].innerHTML.replace(/span|<|>/g, "").replace("/", ""),
+                        realdate: null,
                         img: "https://s3.amazonaws.com/cht2/public/img/ch/featured.png",
                         address: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
                         description: offer.getElementsByClassName("description")[0].innerHTML
                     }
-                    li += '<li class="media">'
-                    li += '<img class="align-self-center mr-3" src="' + new_offer.img + '" alt="' + new_offer.title + '">'
-                    li += '<div class="media-body">'
-                    li += '<h5 class="mt-0"><a href="' + new_offer.url + '" target="_blank">' + new_offer.title + '</a></h5>'
-                    li += '<span>' + new_offer.date + ' / ' + new_offer.company + ' / ' + new_offer.address + '</span>'
-                    li += '<p>' + new_offer.description + '</p>'
-                    li += '</div>'
-                    li += '</li>'
+
+                    /* Fecha */
+                    let anio = 2017 //si
+                    let mes = meses.findIndex(function (mes) {
+                        return mes.substr(0, 3) === new_offer.date.replace(/[0-9]/g, "").replace(" ", "")
+                    })
+                    let dia = new_offer.date.replace(/[a-zA-Z]/g, "").replace(" ", "")
+
+                    new_offer.realdate = new Date(anio, mes, dia)
+
+                    offers.push(new_offer)
                 })
+            })
+
+            /*Ordenamiento por fecha */
+            offers.sort(function (a, b) {
+                return b.realdate - a.realdate
+            })
+
+            offers.forEach(new_offer => {
+                li += '<li class="media">'
+                li += '<img class="align-self-center mr-3" src="' + new_offer.img + '" alt="' + new_offer.title + '">'
+                li += '<div class="media-body">'
+                li += '<h5 class="mt-0"><a href="' + new_offer.url + '" target="_blank">' + new_offer.title + '</a></h5>'
+                li += '<span>' + new_offer.date + ' / ' + new_offer.company + ' / ' + new_offer.address + '</span>'
+                li += '<p>' + new_offer.description + '</p>'
+                li += '</div>'
+                li += '</li>'
             })
             resolve(li)
         })
@@ -73,6 +97,7 @@ const jobfinder = {
     computrabajo: function (pages) {
         return new Promise((resolve, reject) => {
             let li = ''
+            let offers = new Array()
             let base_url = "https://www.computrabajo.cl"
             pages.forEach(pages => {
                 let parser = new DOMParser()
@@ -85,25 +110,44 @@ const jobfinder = {
                         url: base_url + offer.getElementsByClassName("js-o-link")[0].getAttribute("href"),
                         company: offer.getElementsByClassName("empr")[0].innerHTML,
                         date: offer.getElementsByClassName("dO")[0].innerHTML,
+                        realdate: null,
                         img: (offer.getElementsByClassName("lazy")[0]) ? offer.getElementsByClassName("lazy")[0].dataset.original : "https://s.ct-stc.com/web/c/cl/img/logo_cl.png",
                         address: offer.getElementsByClassName("w_100 fl mtb5 lT")[0].getElementsByTagName("span")[5].getElementsByTagName("a")[0].innerHTML + " - " + offer.getElementsByClassName("w_100 fl mtb5 lT")[0].getElementsByTagName("span")[4].getElementsByTagName("a")[0].innerHTML,
                         description: offer.querySelector("p[itemprop='description']").innerHTML
                     }
 
-                    li += '<li class="media">'
-                    li += '<img class="align-self-center mr-3" src="' + new_offer.img + '" alt="' + new_offer.title + '">'
-                    li += '<div class="media-body">'
-                    li += '<h5 class="mt-0"><a href="' + new_offer.url + '" target="_blank">' + new_offer.title + '</a></h5>'
-                    li += '<span>' + new_offer.date + ' / ' + new_offer.company + ' / ' + new_offer.address + '</span>'
-                    li += '<p>' + new_offer.description + '</p>'
-                    li += '</div>'
-                    li += '</li>'
+                    /* Fecha */
+                    let realdate = offer.querySelector("meta[itemprop='datePosted']").content
+                    realdate = realdate.split(" ")
+                    realdate[0] = realdate[0].split("/")
+                    realdate[1] = realdate[1].split(":")
+
+                    let date_aux = new Date(realdate[0][2], realdate[0][1], realdate[0][0], realdate[1][0], realdate[1][1], realdate[1][2])
+                    new_offer.realdate = date_aux
+
+                    offers.push(new_offer)
                 })
+            })
+
+            /*Ordenamiento por fecha */
+            offers.sort(function (a, b) {
+                return b.realdate - a.realdate
+            })
+
+            offers.forEach(new_offer => {
+                li += '<li class="media">'
+                li += '<img class="align-self-center mr-3" src="' + new_offer.img + '" alt="' + new_offer.title + '">'
+                li += '<div class="media-body">'
+                li += '<h5 class="mt-0"><a href="' + new_offer.url + '" target="_blank">' + new_offer.title + '</a></h5>'
+                li += '<span>' + new_offer.date + ' / ' + new_offer.company + ' / ' + new_offer.address + '</span>'
+                li += '<p>' + new_offer.description + '</p>'
+                li += '</div>'
+                li += '</li>'
             })
             resolve(li)
         })
     },
-    yapo: function (pages) {
+    /*yapo: function (pages) {
         return new Promise((resolve, reject) => {
             let li = ''
             pages.forEach(pages => {
@@ -134,7 +178,7 @@ const jobfinder = {
             })
             resolve(li)
         })
-    }
+    }*/
 }
 
 jobfinder.init()

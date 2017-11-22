@@ -13,15 +13,22 @@ class Inicio extends CI_Controller {
     }
     
 	public function index(){
-		$this->load->view("index");
+		$this->load->view("index.html");
 	}
 
 	public function computrabajo(){
 		//Custom Filters
 		$this->query = [
+			//Bio-Bio
 			"prov" => 9,
 			"by" => "publicationtime"
 		];
+
+		/*$this->query = [
+			//Los Lagos
+			"prov" => 11,
+			"by" => "publicationtime"
+		];*/
 
 		$url = "https://www.computrabajo.cl/ofertas-de-trabajo/?";
 
