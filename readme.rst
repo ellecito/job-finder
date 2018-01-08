@@ -17,7 +17,7 @@ Por Hacer
 
 -  Filtros Dinámicos.
 -  Agrupar por rango de fechas, no por sitio.
--  Lograr conectar con `Yapo <https://www.chiletrabajos.cl/>`_.
+-  Lograr conectar con `Yapo <https://www.yapo.cl/>`_.
 -  Mejoras visuales.
 
 ************

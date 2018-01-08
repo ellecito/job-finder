@@ -9,7 +9,7 @@ class Inicio extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->query = [];
-		$this->keywords = ["Desarrollador", "Programador"];
+		$this->keywords = ["Desarrollador", "Programador", "Informatico"];
     }
     
 	public function index(){
@@ -18,24 +18,26 @@ class Inicio extends CI_Controller {
 
 	public function computrabajo(){
 		//Custom Filters
-		$this->query = [
+		$querys = [];
+		$querys[] = [
+			//Los Lagos
+			"prov" => 11,
+			"by" => "publicationtime"
+		];
+		$querys[] = [
 			//Bio-Bio
 			"prov" => 9,
 			"by" => "publicationtime"
 		];
 
-		/*$this->query = [
-			//Los Lagos
-			"prov" => 11,
-			"by" => "publicationtime"
-		];*/
-
 		$url = "https://www.computrabajo.cl/ofertas-de-trabajo/?";
 
 		$pages = [];
 		foreach($this->keywords as $q){
-			$this->query["q"] = $q;
-			$pages[] = file_get_contents($url . http_build_query($this->query));
+			foreach($querys as $query){
+				$query["q"] = $q;
+				$pages[] = file_get_contents($url . http_build_query($query));
+			}
 		}
 
 		if(!array_filter($pages)){
@@ -47,8 +49,13 @@ class Inicio extends CI_Controller {
 
 	public function chiletrabajos(){
 		//Custom Filters
-		$this->query = [
-			"13" => 1035,
+		$querys = [];
+		$querys[] = [
+			"13" => 1035, //Concepcion
+			"f" => 2
+		];
+		$querys[] = [
+			"13" => 1043, //Puerto Montt
 			"f" => 2
 		];
 
@@ -56,8 +63,10 @@ class Inicio extends CI_Controller {
 
 		$pages = [];
 		foreach($this->keywords as $q){
-			$this->query["2"] = $q;
-			$pages[] = file_get_contents($url . http_build_query($this->query));
+			foreach($querys as $query){
+				$query["2"] = $q;
+				$pages[] = file_get_contents($url . http_build_query($query));
+			}
 		}
 
 		if(!array_filter($pages)){
@@ -72,45 +81,31 @@ class Inicio extends CI_Controller {
 		$url = "https://www.yapo.cl/biobio/ofertas_de_empleo/?";
 
 		$pages = [];
+		$urls = [];
+
+		// $context = stream_context_create(
+		// 	array(
+		// 	'http'=>array(
+		// 	  	'method'=>"GET",
+		// 		  'header'=>"Accept-Language: es-CL\r\n" .
+		// 		  		"Accept-Charset: UTF-8, *;q=\r\n" . 
+		// 				"content-type: text/html; charset=ISO-8859-1\r\n" . 
+		// 				"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0\r\n"
+		// 		)
+		//   	)
+		// );
+
 		foreach($this->keywords as $q){
 			$this->query["q"] = $q;
-			$pages[] = file_get_contents($url . http_build_query($this->query));
+			//$pages[] = file_get_contents($url . http_build_query($this->query));
+			//$pages[] = file_get_contents($url . http_build_query($this->query), false, $context);
+			$urls[] = $url . http_build_query($this->query);
 		}
-
+		
 		if(!array_filter($pages)){
-			echo json_encode(["result" => false]);
+			echo json_encode(["result" => false, "urls" => $urls]);
 		}else{
 			echo json_encode(["result" => true, "pages" => $pages]);
-		}
-	}
-
-	public function yapo_curl(){
-		
-		$curl = curl_init();
-		
-		curl_setopt_array($curl, array(
-		  CURLOPT_URL => "https://www.yapo.cl/biobio/ofertas_de_empleo/?q=Desarrollador",
-		  CURLOPT_RETURNTRANSFER => true,
-		  CURLOPT_ENCODING => "",
-		  CURLOPT_MAXREDIRS => 10,
-		  CURLOPT_TIMEOUT => 30,
-		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		  CURLOPT_CUSTOMREQUEST => "GET",
-		  CURLOPT_HTTPHEADER => array(
-			"cache-control: no-cache",
-			"postman-token: dc537b5d-2884-bb29-220a-8fbbe4c20e53"
-		  ),
-		));
-		
-		$response = curl_exec($curl);
-		$err = curl_error($curl);
-		
-		curl_close($curl);
-		
-		if ($err) {
-		  echo "cURL Error #:" . $err;
-		} else {
-		  echo $response;
 		}
 	}
 }
