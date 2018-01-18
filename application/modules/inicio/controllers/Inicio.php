@@ -3,12 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Inicio extends CI_Controller {
 
-	private $query;
 	private $keywords;
 	
 	function __construct(){
 		parent::__construct();
-		$this->query = [];
 		$this->keywords = ["Desarrollador", "Programador", "Informatico"];
     }
     
@@ -77,33 +75,35 @@ class Inicio extends CI_Controller {
 	}
 
 	public function yapo(){
-
-		$url = "https://www.yapo.cl/biobio/ofertas_de_empleo/?";
+		
+		$urls = [];
+		$urls[] = "https://www.yapo.cl/biobio/ofertas_de_empleo/?q=";
+		$urls[] = "https://www.yapo.cl/los_lagos/ofertas_de_empleo/?q=";
 
 		$pages = [];
-		$urls = [];
 
-		// $context = stream_context_create(
-		// 	array(
-		// 	'http'=>array(
-		// 	  	'method'=>"GET",
-		// 		  'header'=>"Accept-Language: es-CL\r\n" .
-		// 		  		"Accept-Charset: UTF-8, *;q=\r\n" . 
-		// 				"content-type: text/html; charset=ISO-8859-1\r\n" . 
-		// 				"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0\r\n"
-		// 		)
-		//   	)
-		// );
+		$context = stream_context_create(
+			array(
+			'http'=>array(
+			  	'method'=>"GET",
+				  'header'=>"Accept-Language: es-CL\r\n" .
+				  		"Accept-Charset: UTF-8, *;q=\r\n" . 
+						"content-type: text/html; charset=ISO-8859-1\r\n" . 
+						"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0\r\n"
+				)
+		  	)
+		);
 
 		foreach($this->keywords as $q){
-			$this->query["q"] = $q;
-			//$pages[] = file_get_contents($url . http_build_query($this->query));
-			//$pages[] = file_get_contents($url . http_build_query($this->query), false, $context);
-			$urls[] = $url . http_build_query($this->query);
+			foreach($urls as $url){
+				$pages[] = utf8_encode(file_get_contents($url . $q, false, $context));
+			}
 		}
+
+		//die(print_r($pages));
 		
 		if(!array_filter($pages)){
-			echo json_encode(["result" => false, "urls" => $urls]);
+			echo json_encode(["result" => false]);
 		}else{
 			echo json_encode(["result" => true, "pages" => $pages]);
 		}
