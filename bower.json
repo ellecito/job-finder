@@ -1,0 +1,22 @@
+{
+  "name": "job-finder",
+  "homepage": "https://github.com/ellecito/job-finder",
+  "authors": [
+    "Victor Jarpa <vicjarpa@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "moment": "^2.20.1",
+    "jquery": "^3.3.1",
+    "bootstrap": "^4.0.0"
+  }
+}
