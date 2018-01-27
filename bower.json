@@ -1,5 +1,5 @@
 {
-  "name": "job-finder",
+  "name": "Jon Finder",
   "homepage": "https://github.com/ellecito/job-finder",
   "authors": [
     "Victor Jarpa <vicjarpa@gmail.com>"
@@ -17,6 +17,7 @@
   "dependencies": {
     "moment": "^2.20.1",
     "jquery": "^3.3.1",
-    "bootstrap": "^4.0.0"
+    "bootstrap": "^4.0.0",
+    "noty": "^3.1.4"
   }
 }

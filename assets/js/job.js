@@ -1,21 +1,96 @@
 const jobfinder = {
     init: function () {
-        Promise.all([
-            this.get(location.href + "inicio/chiletrabajos/"),
-            this.get(location.href + "inicio/computrabajo/"),
-            this.get(location.href + "inicio/yapo/")
-        ]).then(values => {
-            Promise.all([
-                this.chiletrabajos(values[0]),
-                this.computrabajo(values[1]),
-                this.yapo(values[2])
-            ]).then(values => {
-                document.getElementById("offers_chiletrabajos").innerHTML = values[0]
-                document.getElementById("offers_computrabajo").innerHTML = values[1]
-                document.getElementById("offers_yapo").innerHTML = values[2]
+        noty = new Noty({
+            type: 'information',
+            layout: 'topCenter',
+            text: 'Buscando ofertas...'
+        }).show()
+
+        this.get(webservices.chiletrabajos).then(pages => {
+            chiletrabajos.process(pages).then(offers => {
+                this.set(offers, 'offers_chiletrabajos')
+                new Noty({
+                    type: 'success',
+                    layout: 'topCenter',
+                    text: 'Se encontraron ' + offers.length + " ofertas en Chiletrabajos",
+                    timeout: 2000
+                }).show()
+                noty.close()
+            }).catch(error => {
+                new Noty({
+                    type: 'error',
+                    layout: 'topCenter',
+                    text: error,
+                    timeout: 2000
+                }).show()
+                noty.close()
             })
-        }).catch(errors => {
-            console.log(errors)
+        }).catch(error => {
+            new Noty({
+                type: 'error',
+                layout: 'topCenter',
+                text: error,
+                timeout: 2000
+            }).show()
+            noty.close()
+        })
+
+        this.get(webservices.computrabajo).then(pages => {
+            computrabajo.process(pages).then(offers => {
+                this.set(offers, 'offers_computrabajo')
+                new Noty({
+                    type: 'success',
+                    layout: 'topCenter',
+                    text: 'Se encontraron ' + offers.length + " ofertas en Computrabajo",
+                    timeout: 2000
+                }).show()
+                noty.close()
+            }).catch(error => {
+                new Noty({
+                    type: 'error',
+                    layout: 'topCenter',
+                    text: error,
+                    timeout: 2000
+                }).show()
+                noty.close()
+            })
+        }).catch(error => {
+            new Noty({
+                type: 'error',
+                layout: 'topCenter',
+                text: error,
+                timeout: 2000
+            }).show()
+            noty.close()
+        })
+
+        this.get(webservices.yapo).then(pages => {
+            yapo.process(pages).then(offers => {
+                this.set(offers, 'offers_yapo')
+                new Noty({
+                    type: 'success',
+                    layout: 'topCenter',
+                    text: 'Se encontraron ' + offers.length + " ofertas en Yapo",
+                    timeout: 2000
+                }).show()
+                noty.close()
+            }).catch(error => {
+                new Noty({
+                    type: 'error',
+                    layout: 'topCenter',
+                    text: error,
+                    timeout: 2000
+                }).show()
+                noty.close()
+            })
+        }).catch(error => {
+            new Noty({
+                type: 'error',
+                layout: 'topCenter',
+                text: error,
+                timeout: 2000
+            }).show()
+            noty.close()
         })
     },
     get: function (url) {
@@ -44,6 +119,20 @@ const jobfinder = {
 
             xhr.send()
         })
+    },
+    set: function (offers, id) {
+        let li = ''
+        offers.forEach(new_offer => {
+            li += '<li class="media">'
+            li += '<img class="align-self-center mr-3" src="' + new_offer.img + '" alt="' + new_offer.title + '">'
+            li += '<div class="media-body">'
+            li += '<h5 class="mt-0"><a href="' + new_offer.url + '" target="_blank">' + new_offer.title + '</a></h5>'
+            li += '<span>' + moment(new_offer.date).fromNow() + ' / ' + new_offer.company + ' / ' + new_offer.address + '</span>'
+            li += '</div>'
+            li += '</li>'
+            li += '</br>'
+        })
+        document.getElementById(id).innerHTML = li
     },
     chiletrabajos: function (pages) {
         return new Promise((resolve, reject) => {
@@ -212,4 +301,6 @@ const jobfinder = {
     }
 }
 
-jobfinder.init()
+window.onload = function () {
+    jobfinder.init()
+}
