@@ -6,19 +6,22 @@ const chiletrabajos = {
             pages.forEach(pages => {
                 let parser = new DOMParser()
                 let html = parser.parseFromString(pages, "text/html")
-                let offers_get = html.getElementsByClassName("col-sm-6 page-content mb30")[0].getElementsByClassName("jobs-item with-thumb encuentra__empleo--yellow")
+                let cant_offers = parseInt(html.getElementsByClassName('titulo title-lines')[0].getElementsByTagName('h2')[0].innerHTML.replace(/[^0-9]/g, ''))
+                if (cant_offers > 0) {
+                    let offers_get = html.getElementsByClassName("col-sm-6 page-content mb30")[0].getElementsByClassName("jobs-item with-thumb encuentra__empleo--yellow")
 
-                Array.from(offers_get).forEach(offer => {
-                    let new_offer = {
-                        title: offer.getElementsByClassName("title")[0].getElementsByTagName("b")[0].innerHTML,
-                        url: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].href,
-                        company: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
-                        date: chiletrabajos.date(offer.getElementsByClassName("date")[0].innerHTML.replace(/span|<|>/g, "").replace("/", "")),
-                        img: "https://s3.amazonaws.com/cht2/public/img/ch/featured.png",
-                        address: offer.getElementsByClassName("meta")[0].innerHTML.trim()
-                    }
-                    if (offers.map(function (e) { return e.url }).indexOf(new_offer.url) === -1) offers.push(new_offer)
-                })
+                    Array.from(offers_get).forEach(offer => {
+                        let new_offer = {
+                            title: offer.getElementsByClassName("title")[0].getElementsByTagName("b")[0].innerHTML,
+                            url: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].href,
+                            company: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
+                            date: chiletrabajos.date(offer.getElementsByClassName("date")[0].innerHTML.replace(/span|<|>/g, "").replace("/", "")),
+                            img: "https://s3.amazonaws.com/cht2/public/img/ch/featured.png",
+                            address: offer.getElementsByClassName("meta")[0].innerHTML.trim()
+                        }
+                        if (offers.map(function (e) { return e.url }).indexOf(new_offer.url) === -1) offers.push(new_offer)
+                    })
+                }
             })
 
             /*Ordenamiento por fecha */

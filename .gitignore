@@ -32,3 +32,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 #Bower
 /bower_components/
+
+# Vagrant
+.vagrant/

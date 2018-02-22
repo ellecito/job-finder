@@ -99,8 +99,6 @@ class Inicio extends CI_Controller {
 				$pages[] = utf8_encode(file_get_contents($url . $q, false, $context));
 			}
 		}
-
-		//die(print_r($pages));
 		
 		if(!array_filter($pages)){
 			echo json_encode(["result" => false]);
