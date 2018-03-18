@@ -12,8 +12,8 @@ const computrabajo = {
                         let new_offer = {
                             title: offer.getElementsByClassName("js-o-link")[0].innerHTML,
                             url: base_url + offer.getElementsByClassName("js-o-link")[0].getAttribute("href"),
-                            company: (offer.querySelector('span[itemprop="hiringOrganization"]').querySelector('span[itemprop="name"]').querySelector('a') ? offer.querySelector('span[itemprop="hiringOrganization"]').querySelector('span[itemprop="name"]').querySelector('a').innerHTML : offer.querySelector('span[itemprop="hiringOrganization"]').querySelector('span[itemprop="name"]').innerHTML),
-                            date: computrabajo.date(offer.querySelector("meta[itemprop='datePosted']").content),
+                            company: offer.getElementsByClassName("it-blank")[0].innerHTML.trim(),
+                            date: computrabajo.date(offer.getElementsByClassName("dO")[0].innerHTML),
                             img: (offer.getElementsByClassName("lazy")[0]) ? offer.getElementsByClassName("lazy")[0].dataset.original : "https://s.ct-stc.com/web/c/cl/img/logo_cl.png",
                             address: offer.getElementsByClassName("w_100 fl mtb5 lT")[0].querySelector('span[itemprop="addressRegion"]').getElementsByTagName("a")[0].innerHTML + " - " + offer.getElementsByClassName("w_100 fl mtb5 lT")[0].querySelector('span[itemprop="addressLocality"]').getElementsByTagName("a")[0].innerHTML
                         }
@@ -37,20 +37,34 @@ const computrabajo = {
     },
     /**
      * Procesa la fecha y retorna una mas trabajable.
-     * La variable raw_date es una fecha tipo '26/01/2018 14:52:00'.
+     * La variable raw_date queda en un array similar a [2, 'Nov', 10, 12] a partir de una fecha tipo '2 Nov 10:12'.
      */
     date: function (raw_date) {
         raw_date = raw_date.split(" ")
-        let date = raw_date[0].split("/")
-        let time = raw_date[1].split(":")
-
-        let day = parseInt(date[0])
-        let month = parseInt(date[1]) - 1
-        let year = parseInt(date[2])
-        let hour = parseInt(time[0])
-        let minutes = parseInt(time[1])
-        let seconds = parseInt(time[2])
-
+        let day
+        let month
+        let year
+        let hour
+        let minutes
+        let seconds
+        if (raw_date.length === 2) {
+            day = parseInt(raw_date[0])
+            month = meses.findIndex(function (mes) {
+                return mes.toLowerCase() === raw_date[1]
+            })
+            year = new Date().getFullYear()
+            hour = 00
+            minutes = 00
+            seconds = 00
+        } else {
+            day = (raw_date[0] === 'Ayer,' ? new Date().getUTCDate() - 1 : new Date().getUTCDate())
+            month = new Date().getMonth()
+            year = new Date().getFullYear()
+            hour_aux = raw_date[1].split(":")
+            hour = (raw_date[2] === "pm" ? parseInt(hour_aux[0]) + 12 : parseInt(hour_aux[0]))
+            minutes = parseInt(hour_aux[1])
+            seconds = 00
+        }
         return new Date(year, month, day, hour, minutes, seconds).getTime()
     }
 }

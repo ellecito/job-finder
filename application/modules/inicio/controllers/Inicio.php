@@ -41,6 +41,7 @@ class Inicio extends CI_Controller {
 		if(!array_filter($pages)){
 			echo json_encode(["result" => false]);
 		}else{
+			//die(print_r($pages));
 			echo json_encode(["result" => true, "pages" => $pages]);
 		}
 	}

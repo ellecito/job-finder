@@ -53,6 +53,7 @@ const jobfinder = {
                     timeout: 2000
                 }).show()
                 noty.close()
+                console.error(error)
             })
         }).catch(error => {
             new Noty({

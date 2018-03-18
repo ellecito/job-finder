@@ -48,7 +48,7 @@ const chiletrabajos = {
         let month = meses.findIndex(function (mes) {
             return mes.substr(0, 3) === raw_date[1]
         })
-        let year = (new Date(new Date().getFullYear(), month, day).getTime() <= new Date(new Date().getFullYear(), new Date().getDay(), new Date().getMonth()).getTime() ? new Date().getFullYear() : new Date().getFullYear() - 1)
+        let year = (new Date(new Date().getFullYear(), month, day).getTime() <= new Date(new Date().getFullYear(), new Date().getUTCDate(), new Date().getMonth()).getTime() ? new Date().getFullYear() : new Date().getFullYear() - 1)
         let hour = 00
         let minutes = 00
         let seconds = 00

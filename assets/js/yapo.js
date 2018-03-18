@@ -51,13 +51,13 @@ const yapo = {
             month = meses.findIndex(function (mes) {
                 return mes.substr(0, 3) === raw_date[1]
             })
-            year = (new Date(new Date().getFullYear(), month, day).getTime() <= new Date(new Date().getFullYear(), new Date().getDay(), new Date().getMonth()).getTime() ? new Date().getFullYear() : new Date().getFullYear() - 1)
+            year = (new Date(new Date().getFullYear(), month, day).getTime() <= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getUTCDate()).getTime() ? new Date().getFullYear() : new Date().getFullYear() - 1)
             raw_date = raw_date[2].split(":")
             hour = parseInt(raw_date[0])
             minutes = parseInt(raw_date[1])
             seconds = 00
         } else {
-            day = new Date().getDay()
+            day = new Date().getUTCDate()
             month = new Date().getMonth()
             year = new Date().getFullYear()
             raw_date = raw_date[1].split(":")
