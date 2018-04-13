@@ -8,7 +8,7 @@ Intento de hacer una página que agrupe los sitios de ofertas de trabajo que vis
 Filtros
 *******************
 
--  Ubicación: VIII/X Región.
+-  Ubicación: VIII Región.
 -  Palabras Clave: Desarrollador/Programador/Informatico.
 
 *******************

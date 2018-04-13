@@ -17,11 +17,11 @@ class Inicio extends CI_Controller {
 	public function computrabajo(){
 		//Custom Filters
 		$querys = [];
-		$querys[] = [
-			//Los Lagos
-			"prov" => 11,
-			"by" => "publicationtime"
-		];
+		// $querys[] = [
+		// 	//Los Lagos
+		// 	"prov" => 11,
+		// 	"by" => "publicationtime"
+		// ];
 		$querys[] = [
 			//Bio-Bio
 			"prov" => 9,
@@ -41,7 +41,6 @@ class Inicio extends CI_Controller {
 		if(!array_filter($pages)){
 			echo json_encode(["result" => false]);
 		}else{
-			//die(print_r($pages));
 			echo json_encode(["result" => true, "pages" => $pages]);
 		}
 	}
@@ -53,10 +52,10 @@ class Inicio extends CI_Controller {
 			"13" => 1035, //Concepcion
 			"f" => 2
 		];
-		$querys[] = [
-			"13" => 1043, //Puerto Montt
-			"f" => 2
-		];
+		// $querys[] = [
+		// 	"13" => 1043, //Puerto Montt
+		// 	"f" => 2
+		// ];
 
 		$url = "https://www.chiletrabajos.cl/encuentra-un-empleo/?";
 
@@ -79,7 +78,7 @@ class Inicio extends CI_Controller {
 		
 		$urls = [];
 		$urls[] = "https://www.yapo.cl/biobio/ofertas_de_empleo/?q=";
-		$urls[] = "https://www.yapo.cl/los_lagos/ofertas_de_empleo/?q=";
+		//$urls[] = "https://www.yapo.cl/los_lagos/ofertas_de_empleo/?q=";
 
 		$pages = [];
 
