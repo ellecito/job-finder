@@ -17,19 +17,21 @@ const jobfinder = {
                 }).show()
                 noty.close()
             }).catch(error => {
+                console.error(error)
                 new Noty({
                     type: 'error',
                     layout: 'topCenter',
-                    text: error,
+                    text: 'Error al conectar con Chiletrabajos',
                     timeout: 2000
                 }).show()
                 noty.close()
             })
         }).catch(error => {
+            console.error(error)
             new Noty({
                 type: 'error',
                 layout: 'topCenter',
-                text: error,
+                text: 'Error al conectar con Chiletrabajos',
                 timeout: 2000
             }).show()
             noty.close()
@@ -46,20 +48,22 @@ const jobfinder = {
                 }).show()
                 noty.close()
             }).catch(error => {
+                console.error(error)
                 new Noty({
                     type: 'error',
                     layout: 'topCenter',
-                    text: error,
+                    text: 'Error al conectar con Computrabajo',
                     timeout: 2000
                 }).show()
                 noty.close()
                 console.error(error)
             })
         }).catch(error => {
+            console.error(error)
             new Noty({
                 type: 'error',
                 layout: 'topCenter',
-                text: error,
+                text: 'Error al conectar con Computrabajo',
                 timeout: 2000
             }).show()
             noty.close()
@@ -76,19 +80,21 @@ const jobfinder = {
                 }).show()
                 noty.close()
             }).catch(error => {
+                console.error(error)
                 new Noty({
                     type: 'error',
                     layout: 'topCenter',
-                    text: error,
+                    text: 'Error al conectar con Yapo',
                     timeout: 2000
                 }).show()
                 noty.close()
             })
         }).catch(error => {
+            console.error(error)
             new Noty({
                 type: 'error',
                 layout: 'topCenter',
-                text: error,
+                text: 'Error al conectar con Yapo',
                 timeout: 2000
             }).show()
             noty.close()

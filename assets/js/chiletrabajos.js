@@ -12,7 +12,7 @@ const chiletrabajos = {
 
                     Array.from(offers_get).forEach(offer => {
                         let new_offer = {
-                            title: offer.getElementsByClassName("title")[0].getElementsByTagName("b")[0].innerHTML,
+                            title: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].innerHTML,
                             url: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].href,
                             company: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
                             date: chiletrabajos.date(offer.getElementsByClassName("date")[0].innerHTML.replace(/span|<|>/g, "").replace("/", "")),
