@@ -32,6 +32,7 @@ Sitios
 -  `Chiletrabajos <https://www.chiletrabajos.cl/>`_.
 -  `Computrabajo <https://www.computrabajo.cl/>`_.
 -  `Yapo <https://www.yapo.cl/>`_.
+-  `Trabajando <https://www.trabajando.cl/>`_.
 
 *********
 Demo

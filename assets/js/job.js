@@ -99,6 +99,37 @@ const jobfinder = {
             }).show()
             noty.close()
         })
+
+        this.get(webservices.trabajando).then(pages => {
+            trabajando.process(pages).then(offers => {
+                this.set(offers, 'offers_trabajando')
+                new Noty({
+                    type: 'success',
+                    layout: 'topCenter',
+                    text: 'Se encontraron ' + offers.length + " ofertas en Trabajando",
+                    timeout: 2000
+                }).show()
+                noty.close()
+            }).catch(error => {
+                console.error(error)
+                new Noty({
+                    type: 'error',
+                    layout: 'topCenter',
+                    text: 'Error al conectar con Trabajando',
+                    timeout: 2000
+                }).show()
+                noty.close()
+            })
+        }).catch(error => {
+            console.error(error)
+            new Noty({
+                type: 'error',
+                layout: 'topCenter',
+                text: 'Error al conectar con Trabajando',
+                timeout: 2000
+            }).show()
+            noty.close()
+        })
     },
     get: function (url) {
         return new Promise((resolve, reject) => {

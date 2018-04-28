@@ -3,5 +3,6 @@ const BASE_URL = location.href + "inicio/"
 const webservices = {
     chiletrabajos: BASE_URL + "chiletrabajos/",
     computrabajo: BASE_URL + "computrabajo/",
-    yapo: BASE_URL + "yapo/"
+    yapo: BASE_URL + "yapo/",
+    trabajando: BASE_URL + "trabajando/",
 }
