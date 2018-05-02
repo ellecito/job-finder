@@ -30,7 +30,7 @@ const yapo = {
             if (offers.length > 0) {
                 resolve(offers)
             } else {
-                reject("No hay ofertas en Chiletrabajos.")
+                reject("No hay ofertas en Yapo.")
             }
         })
     },
@@ -45,26 +45,36 @@ const yapo = {
         let year
         let hour
         let minutes
-        let seconds
+        let date
         if (raw_date.length > 2) {
             day = parseInt(raw_date[0])
+            day = (day < 10 ? "0" + day : day.toString())
             month = meses.findIndex(function (mes) {
                 return mes.substr(0, 3) === raw_date[1]
-            })
-            year = (new Date(new Date().getFullYear(), month, day).getTime() <= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getUTCDate()).getTime() ? new Date().getFullYear() : new Date().getFullYear() - 1)
+            }) + 1
+            month = (month < 10 ? "0" + month : month.toString())
             raw_date = raw_date[2].split(":")
-            hour = parseInt(raw_date[0])
-            minutes = parseInt(raw_date[1])
-            seconds = 00
+            hour = raw_date[0]
+            minutes = raw_date[1]
+            date = moment(new Date().getFullYear().toString() + month + day + hour + minutes, "YYYYMMDDHHmm").valueOf()
+            if (date > moment().valueOf()) date = moment(new Date().getFullYear().toString() + month + day + hour + minutes, "YYYYMMDDHHmm").subtract(1, "years").valueOf()
         } else {
-            day = new Date().getUTCDate()
-            month = new Date().getMonth()
-            year = new Date().getFullYear()
+            day = (new Date().getUTCDate() < 10 ? "0" + new Date().getUTCDate() : new Date().getUTCDate().toString())
+            month = new Date().getMonth() + 1
+            month = (month < 10 ? "0" + month : month.toString())
             raw_date = raw_date[1].split(":")
-            hour = parseInt(raw_date[0])
-            minutes = parseInt(raw_date[1])
-            seconds = 00
+            hour = raw_date[0]
+            minutes = raw_date[1]
+            /*Hoy*/
+            if (raw_date[0] == "Hoy") {
+                date = moment(new Date().getFullYear().toString() + month + day + hour + minutes, "YYYYMMDDHHmm").valueOf()
+            }
+            /*Ayer*/
+            if (raw_date[0] == "Ayer") {
+                date = moment(new Date().getFullYear().toString() + month + day + hour + minutes, "YYYYMMDDHHmm").subtract(1, "days").valueOf()
+            }
+            if (date > moment().valueOf()) date = moment(new Date().getFullYear().toString() + month + day + hour + minutes, "YYYYMMDDHHmm").subtract(1, "years").valueOf()
         }
-        return new Date(year, month, day, hour, minutes, seconds).getTime()
+        return date
     }
 }

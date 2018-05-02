@@ -40,19 +40,18 @@ const chiletrabajos = {
     },
     /**
      * Procesa la fecha y retorna una mas trabajable.
-     * La variable raw_date queda en un array similar a [2, 'Nov', 10, 12] a partir de una fecha tipo '2 Nov'.
+     * La variable raw_date queda en un array similar a [2, 'Nov'] a partir de una fecha tipo '2 Nov'.
      */
     date: function (raw_date) {
         raw_date = raw_date.split(" ")
         let day = parseInt(raw_date[0])
+        day = (day < 10 ? "0" + day : day.toString())
         let month = meses.findIndex(function (mes) {
             return mes.substr(0, 3) === raw_date[1]
-        })
-        let year = (new Date(new Date().getFullYear(), month, day).getTime() <= new Date(new Date().getFullYear(), new Date().getUTCDate(), new Date().getMonth()).getTime() ? new Date().getFullYear() : new Date().getFullYear() - 1)
-        let hour = 00
-        let minutes = 00
-        let seconds = 00
-
-        return new Date(year, month, day, hour, minutes, seconds).getTime()
+        }) + 1
+        month = (month < 10 ? "0" + month : month.toString())
+        let date = moment(new Date().getFullYear().toString() + month + day, "YYYYMMDD").valueOf()
+        if (date > moment().valueOf()) date = moment(new Date().getFullYear().toString() + month + day, "YYYYMMDD").subtract(1, "years").valueOf()
+        return date
     }
 }

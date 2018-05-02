@@ -29,28 +29,22 @@ const trabajando = {
             if (offers.length > 0) {
                 resolve(offers)
             } else {
-                reject("No hay ofertas en Chiletrabajos.")
+                reject("No hay ofertas en Trabajando.")
             }
         })
     },
     /**
      * Procesa la fecha y retorna una mas trabajable.
-     * La variable raw_date queda en un array similar a [2, 'Nov', 10, 12] a partir de una fecha tipo '2 Nov 10:12'.
+     * La variable raw_date queda en un array similar a ['01', '05, '2018'] a partir de una fecha tipo '01/05/2018'.
      */
     date: function (raw_date) {
         raw_date = raw_date.split("/")
         let day
         let month
         let year
-        let hour
-        let minutes
-        let seconds
-        day = parseInt(raw_date[0])
-        month = parseInt(raw_date[1]) - 1
-        year = parseInt(raw_date[2])
-        hour = 00
-        minutes = 00
-        seconds = 00
-        return new Date(year, month, day, hour, minutes, seconds).getTime()
+        day = raw_date[0]
+        month = raw_date[1]
+        year = raw_date[2]
+        return moment(year + month + day, "YYYYMMDD").valueOf()
     }
 }
