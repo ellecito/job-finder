@@ -12,7 +12,7 @@ const trabajando = {
                             title: offer.querySelector('[itemprop="title"]').getElementsByTagName('a')[0].innerHTML,
                             url: offer.querySelector('[itemprop="title"]').getElementsByTagName('a')[0].href,
                             company: offer.querySelector('[itemprop="hiringOrganization"]').innerHTML,
-                            date: trabajando.date(offer.querySelector('[itemprop="datePosted"]').innerHTML),
+                            date: (offer.querySelector('[itemprop="datePosted"]') ? trabajando.date(offer.querySelector('[itemprop="datePosted"]').innerHTML) : new Date()),
                             img: offer.getElementsByClassName('img_holder')[0].getElementsByTagName('img')[0].src,
                             address: offer.querySelector('[itemprop="jobLocation"]').innerHTML
                         }
