@@ -2,7 +2,7 @@
 Job Finder
 ###################
 
-Intento de hacer una página que agrupe los sitios de ofertas de trabajo que visito regularmente. Similar a Indeed, pero mas decente (o esa es la idea).
+Web scraping de portales de trabajo.
 
 *******************
 Filtros
@@ -38,4 +38,4 @@ Sitios
 Demo
 *********
 
--  `Demo <http://victorjarpa.cl/job-finder/>`_.
+-  `Demo <https://victorjarpa.cl/job-finder/>`_.
