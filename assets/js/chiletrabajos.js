@@ -8,14 +8,13 @@ const chiletrabajos = {
                 let html = parser.parseFromString(pages, "text/html")
                 let cant_offers = parseInt(html.getElementsByClassName('titulo title-lines')[0].getElementsByTagName('h2')[0].innerHTML.replace(/[^0-9]/g, ''))
                 if (cant_offers > 0) {
-                    let offers_get = html.getElementsByClassName("col-sm-6 page-content mb30")[0].getElementsByClassName("jobs-item with-thumb encuentra__empleo--yellow")
-
+                    let offers_get = html.getElementsByClassName("col-sm-6 page-content mb30")[0].getElementsByClassName("job-item")
                     Array.from(offers_get).forEach(offer => {
                         let new_offer = {
                             title: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].innerHTML,
                             url: offer.getElementsByClassName("title")[0].getElementsByTagName("a")[0].href,
                             company: offer.getElementsByClassName("meta")[0].innerHTML.trim(),
-                            date: chiletrabajos.date(offer.getElementsByClassName("date")[0].innerHTML.replace(/span|<|>/g, "").replace("/", "")),
+                            date: chiletrabajos.date(offer.getElementsByClassName("meta")[1].innerHTML.replace(/<\/?[^>]+(>|$)/g, "").replace(",", "").trim()),
                             img: "https://s3.amazonaws.com/cht2/public/img/ch/featured.png",
                             address: offer.getElementsByClassName("meta")[0].innerHTML.trim()
                         }
@@ -40,18 +39,19 @@ const chiletrabajos = {
     },
     /**
      * Procesa la fecha y retorna una mas trabajable.
-     * La variable raw_date queda en un array similar a [2, 'Nov'] a partir de una fecha tipo '2 Nov'.
+     * La variable raw_date queda en un array similar a [18, 'Julio', 2018] a partir de una fecha tipo '2 Julio 2018'.
      */
     date: function (raw_date) {
         raw_date = raw_date.split(" ")
-        let day = parseInt(raw_date[0])
-        day = (day < 10 ? "0" + day : day.toString())
+        console.log(raw_date)
+        let day = raw_date[0].toString()
         let month = meses.findIndex(function (mes) {
-            return mes.substr(0, 3) === raw_date[1]
+            return mes.toLowerCase() == raw_date[1].toLowerCase()
         }) + 1
         month = (month < 10 ? "0" + month : month.toString())
-        let date = moment(new Date().getFullYear().toString() + month + day, "YYYYMMDD").valueOf()
-        if (date > moment().valueOf()) date = moment(new Date().getFullYear().toString() + month + day, "YYYYMMDD").subtract(1, "years").valueOf()
+        let year = raw_date[2]
+        console.log(year + month + day)
+        let date = moment(year + month + day, "YYYYMMDD").valueOf()
         return date
     }
 }
