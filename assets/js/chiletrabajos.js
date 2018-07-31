@@ -39,18 +39,17 @@ const chiletrabajos = {
     },
     /**
      * Procesa la fecha y retorna una mas trabajable.
-     * La variable raw_date queda en un array similar a [18, 'Julio', 2018] a partir de una fecha tipo '2 Julio 2018'.
+     * La variable raw_date queda en un array similar a ["17", "de", "", "Julio", "de", "2018"] a partir de una fecha tipo '25 de  Julio de 2018
+'.
      */
     date: function (raw_date) {
         raw_date = raw_date.split(" ")
-        console.log(raw_date)
-        let day = raw_date[0].toString()
+        let day = raw_date[0]
         let month = meses.findIndex(function (mes) {
-            return mes.toLowerCase() == raw_date[1].toLowerCase()
+            return mes.toLowerCase() == raw_date[3].toLowerCase()
         }) + 1
         month = (month < 10 ? "0" + month : month.toString())
-        let year = raw_date[2]
-        console.log(year + month + day)
+        let year = raw_date[5]
         let date = moment(year + month + day, "YYYYMMDD").valueOf()
         return date
     }
