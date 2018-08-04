@@ -15,7 +15,7 @@ const computrabajo = {
                             company: offer.getElementsByClassName("it-blank")[0].innerHTML.trim(),
                             date: computrabajo.date(offer.getElementsByClassName("dO")[0].innerHTML),
                             img: (offer.getElementsByClassName("lazy")[0]) ? offer.getElementsByClassName("lazy")[0].dataset.original : "https://s.ct-stc.com/web/c/cl/img/logo_cl.png",
-                            address: offer.getElementsByClassName("w_100 fl mtb5 lT")[0].querySelector('span[itemprop="addressRegion"]').getElementsByTagName("a")[0].innerHTML + " - " + offer.getElementsByClassName("w_100 fl mtb5 lT")[0].querySelector('span[itemprop="addressLocality"]').getElementsByTagName("a")[0].innerHTML
+                            address: offer.querySelectorAll("a:not([class])")[0].innerHTML + " - " + offer.querySelectorAll("a:not([class])")[1].innerHTML
                         }
 
                         if (offers.map(function (e) { return e.url }).indexOf(new_offer.url) === -1) offers.push(new_offer)
